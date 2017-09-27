@@ -1,6 +1,6 @@
 {
   "name": "mongoose-query-parser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -22,7 +22,7 @@
     "url"
   ],
   "author": "Leodinas Hao",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/leodinas-hao/mongoose-query-parser/issues"
   },
