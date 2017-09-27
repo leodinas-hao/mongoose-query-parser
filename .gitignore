@@ -57,6 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
-# generated
+# compiled
 lib/
+**/*.map
 
