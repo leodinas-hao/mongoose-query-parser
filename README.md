@@ -10,6 +10,11 @@ The library is built highly inspired by [api-query-params](https://github.com/lo
 - **Custom**. Allows customization of keys (ie, `fields` v.s. `select`) and options
 - **Agnostic.** Works with any web frameworks (Express …) and/or Mongoose/MongoDb libraries
 
+## Installation
+```
+npm install mongoose-query-parser --save
+```
+
 ## Usage
 
 ### API
