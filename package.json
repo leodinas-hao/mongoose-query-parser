@@ -1,0 +1,44 @@
+{
+  "name": "mongoose-query-parser",
+  "version": "1.0.0",
+  "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "compile": "rimraf dist && tsc",
+    "prepublish": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "mocha ./dist/**/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leodinas-hao/mongoose-query-parser.git"
+  },
+  "keywords": [
+    "querystring",
+    "mongodb query",
+    "mongoose query",
+    "querystring parser"
+  ],
+  "author": "Leodinas Hao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leodinas-hao/mongoose-query-parser/issues"
+  },
+  "homepage": "https://github.com/leodinas-hao/mongoose-query-parser#readme",
+  "devDependencies": {
+    "@types/chai": "4.0.4",
+    "@types/lodash": "4.14.76",
+    "@types/mocha": "2.2.43",
+    "@types/node": "8.0.31",
+    "chai": "4.1.2",
+    "mocha": "3.5.3",
+    "mocha-typescript": "1.1.9",
+    "rimraf": "2.6.2",
+    "typescript": "2.5.3"
+  },
+  "dependencies": {
+    "lodash": "4.17.4",
+    "moment": "2.18.1"
+  }
+}
