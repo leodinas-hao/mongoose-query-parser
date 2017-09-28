@@ -22,7 +22,7 @@ export interface QueryOptions {
   limit?: number,
   skip?: number,
   select?: string | Object, // ie.: { field: 0, field2: 0 }
-  populate?: { path: string, select?: string } | { path: string, select?: string }[], // path(s) to populate:  a space delimited string of the path names or array like: [{path: 'field1', select: 'p1 p2'}, ...]
+  populate?: string | Object, // path(s) to populate:  a space delimited string of the path names or array like: [{path: 'field1', select: 'p1 p2'}, ...]
 }
 
 export class MongooseQueryParser {
