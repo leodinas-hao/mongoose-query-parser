@@ -1,5 +1,7 @@
 # mongoose-query-parser
 
+[![NPM version][npm-image]][npm-url]
+
 Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...
 
 The library is built highly inspired by [api-query-params](https://github.com/loris/api-query-params)
@@ -96,3 +98,6 @@ parser.parse('filter={"$or":[{"key1":"value1"},{"key2":"value2"}]}');
 //    },
 //  }
 ```
+
+[npm-url]: https://www.npmjs.com/package/mongoose-query-parser
+[npm-image]: https://img.shields.io/npm/v/mongoose-query-parser.svg?style=flat-square
