@@ -18,12 +18,41 @@ class Tester {
     assert.isOk(parsed.filter.null === null);
   }
 
+  @test('should parse query with string templates')
+  generalParse2() {
+    const parser = new MongooseQueryParser();
+    const predefined = {
+      vip: { name: { $in: ['Google', 'Microsoft', 'NodeJs'] } },
+      sentStatus: 'sent'
+    };
+    const parsed = parser.parse('${vip}&status=${sentStatus}&timestamp>2017-10-01&author.firstName=/john/i&limit=100&skip=50&sort=-timestamp&select=name&populate=children', predefined);
+    assert.isOk(parsed.filter.status === predefined.sentStatus);
+    assert.isOk(parsed.filter.name.$in.length === 3);
+    assert.isOk(parsed.filter.timestamp['$gt'] instanceof Date);
+    assert.isOk(parsed.filter['author.firstName'] instanceof RegExp);
+    assert.isOk(parsed.limit === 100);
+    assert.isOk(parsed.skip === 50);
+    assert.isNotNull(parsed.sort);
+    assert.isNotNull(parsed.select);
+    assert.isNotNull(parsed.populate);
+  }
+
   @test('should parse populate query')
   async populateParse() {
     let parser = new MongooseQueryParser();
     let qry = '_id=1&populate=serviceSalesOrders,customer.category,customer.name';
     let parsed = parser.parse(qry);
     assert.isOk((parsed.populate as any).length === 2);
+  }
+
+  @test('built in casters')
+  builtInCastersTest() {
+    let parser = new MongooseQueryParser();
+    let qry = 'key1=string(10)&key2=date(2017-10-01)&key3=string(null)';
+    let parsed = parser.parse(qry);
+    assert.isOk(typeof parsed.filter.key1 === 'string');
+    assert.isOk(parsed.filter.key2 instanceof Date);
+    assert.isOk(typeof parsed.filter.key3 === 'string');
   }
 
   @test('should parse caster')

@@ -1,12 +1,13 @@
 {
   "name": "mongoose-query-parser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "compile": "rimraf lib && tsc",
-    "prepublish": "npm run compile",
+    "clean": "rimraf lib",
+    "compile": "npm run clean && tsc",
+    "prepublishOnly": "npm run compile",
     "pretest": "npm run compile",
     "test": "mocha ./lib/**/*.spec.js"
   },
@@ -36,6 +37,7 @@
     "mocha": "3.5.3",
     "mocha-typescript": "1.1.9",
     "rimraf": "2.6.2",
+    "ts-node": "3.3.0",
     "typescript": "2.5.3"
   },
   "dependencies": {

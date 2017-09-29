@@ -3,7 +3,7 @@ import * as Moment from 'moment';
 import * as _ from 'lodash';
 
 export interface ParserOptions {
-  dateFormat?: any[],
+  dateFormat?: any,
   blacklist?: string[], // list of fields should not be in filter
   casters?: { [key: string]: (val: string) => any },
   castParams?: { [key: string]: string },
