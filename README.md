@@ -133,7 +133,7 @@ parser.parse('skip=5&limit=10');
 // }
 ```
 
-#### select operator
+#### Select operator
 
 - Useful to limit fields to return in each records
 - Default operator key is `select`
