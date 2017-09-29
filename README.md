@@ -1,6 +1,7 @@
 # mongoose-query-parser
 
 [![NPM version][npm-image]][npm-url]
+[![Downloads][download-badge]][npm-url]
 
 Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...
 
@@ -323,3 +324,4 @@ parser.parse('key1=lowercase(VALUE)&key2=int(10.5)&key3=ABC');
 
 [npm-url]: https://www.npmjs.com/package/mongoose-query-parser
 [npm-image]: https://img.shields.io/npm/v/mongoose-query-parser.svg?style=flat-square
+[download-badge]: https://img.shields.io/npm/dm/mongoose-query-parser.svg?style=flat-square 
