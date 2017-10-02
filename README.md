@@ -322,6 +322,9 @@ parser.parse('key1=lowercase(VALUE)&key2=int(10.5)&key3=ABC');
 // }
 ```
 
+## License
+MIT
+
 [npm-url]: https://www.npmjs.com/package/mongoose-query-parser
 [npm-image]: https://img.shields.io/npm/v/mongoose-query-parser.svg?style=flat-square
 [download-badge]: https://img.shields.io/npm/dm/mongoose-query-parser.svg?style=flat-square 
