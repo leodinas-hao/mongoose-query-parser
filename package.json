@@ -1,6 +1,6 @@
 {
   "name": "mongoose-query-parser",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -9,7 +9,8 @@
     "compile": "npm run clean && tsc",
     "prepublishOnly": "npm run compile",
     "pretest": "npm run compile",
-    "test": "mocha ./lib/**/*.spec.js"
+    "test": "mocha ./lib/**/*.spec.js",
+    "lint": "tslint src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "mocha-typescript": "1.1.9",
     "rimraf": "2.6.2",
     "ts-node": "3.3.0",
+    "tslint": "5.7.0",
     "typescript": "2.5.3"
   },
   "dependencies": {

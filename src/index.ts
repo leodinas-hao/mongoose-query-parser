@@ -1,28 +1,28 @@
-import * as qs from "querystring";
+import * as qs from 'querystring';
 import * as Moment from 'moment';
 import * as _ from 'lodash';
 
 export interface ParserOptions {
-  dateFormat?: any,
-  blacklist?: string[], // list of fields should not be in filter
-  casters?: { [key: string]: (val: string) => any },
-  castParams?: { [key: string]: string },
+  dateFormat?: any;
+  blacklist?: string[]; // list of fields should not be in filter
+  casters?: { [key: string]: (val: string) => any };
+  castParams?: { [key: string]: string };
   // rename the keys
-  selectKey?: string,
-  populateKey?: string,
-  sortKey?: string,
-  skipKey?: string,
-  limitKey?: string,
-  filterKey?: string
+  selectKey?: string;
+  populateKey?: string;
+  sortKey?: string;
+  skipKey?: string;
+  limitKey?: string;
+  filterKey?: string;
 }
 
 export interface QueryOptions {
-  filter: any, // mongodb json query
-  sort?: string | Object, // ie.: { field: 1, field2: -1 }
-  limit?: number,
-  skip?: number,
-  select?: string | Object, // ie.: { field: 0, field2: 0 }
-  populate?: string | Object, // path(s) to populate:  a space delimited string of the path names or array like: [{path: 'field1', select: 'p1 p2'}, ...]
+  filter: Object; // mongodb json query
+  sort?: string | Object; // ie.: { field: 1, field2: -1 }
+  limit?: number;
+  skip?: number;
+  select?: string | Object; // ie.: { field: 0, field2: 0 }
+  populate?: string | Object; // path(s) to populate:  a space delimited string of the path names or array like: [{path: 'field1', select: 'p1 p2'}, ...]
 }
 
 export class MongooseQueryParser {
@@ -38,7 +38,7 @@ export class MongooseQueryParser {
         throw new Error(`Invalid date string: [${val}]`);
       }
     }
-  }
+  };
 
   private readonly operators = [
     { operator: 'select', method: this.castSelect, defaultKey: 'select' },
@@ -64,8 +64,8 @@ export class MongooseQueryParser {
   }
 
   /**
-   * 
-   * @param {string | Object} query 
+   * parses query string/object to Mongoose friendly query object/QueryOptions
+   * @param {string | Object} query
    * @param {Object} [context]
    * @return {QueryOptions}
    */
@@ -87,6 +87,14 @@ export class MongooseQueryParser {
     return result as QueryOptions;
   }
 
+  /**
+   * parses string to typed values
+   * This methods will apply auto type casting on Number, RegExp, Date, Boolean and null
+   * Also, it will apply defined casters in given options of the instance
+   * @param {string} value
+   * @param {string} key
+   * @return {any} typed value
+   */
   parseValue(value: string, key?: string): any {
     const me = this;
     const options = this.options;
@@ -209,7 +217,7 @@ export class MongooseQueryParser {
    * select=a,b or select=-a,-b
    * =>
    * {select: { a: 1, b: 1 }} or {select: { a: 0, b: 0 }}
-   * @param val 
+   * @param val
    */
   private castSelect(val) {
     const fields = this.parseUnaries(val, { plus: 1, minus: 0 });
@@ -243,7 +251,7 @@ export class MongooseQueryParser {
    * populate=field1.p1,field1.p2,field2
    * =>
    * [{path: 'field1', select: 'p1 p2'}, {path: 'field2'}]
-   * @param val 
+   * @param val
    */
   private castPopulate(val: string) {
     return val
@@ -276,7 +284,7 @@ export class MongooseQueryParser {
    * sort=-a,b
    * =>
    * {sort: {a: -1, b: 1}}
-   * @param sort 
+   * @param sort
    */
   private castSort(sort: string) {
     return this.parseUnaries(sort);
@@ -304,7 +312,7 @@ export class MongooseQueryParser {
    * skip=100
    * =>
    * {skip: 100}
-   * @param skip 
+   * @param skip
    */
   private castSkip(skip: string) {
     return Number(skip);
@@ -315,7 +323,7 @@ export class MongooseQueryParser {
    * limit=10
    * =>
    * {limit: 10}
-   * @param limit 
+   * @param limit
    */
   private castLimit(limit: string) {
     return Number(limit);
@@ -323,8 +331,8 @@ export class MongooseQueryParser {
 
   /**
    * transform predefined query strings defined in query string to the actual query object out of the given context
-   * @param query 
-   * @param context 
+   * @param query
+   * @param context
    */
   private parsePredefinedQuery(query, context?: Object) {
     if (context) {
@@ -351,7 +359,7 @@ export class MongooseQueryParser {
                 // 1). as a key: {'${qry}': {$exits: true}} => {${qry object}}
                 return _.merge(prev, val);
               } else if (_.isString(val)) {
-                // 1). as a key: {'${qry}': 'something'} => {'${qry object}': 'something'}                
+                // 1). as a key: {'${qry}': 'something'} => {'${qry object}': 'something'}
                 key = val;
               } else {
                 throw new Error(`Invalid query string at ${key}`);
@@ -362,7 +370,7 @@ export class MongooseQueryParser {
             ({ match, val } = _match(curr));
             if (match) {
               _.isNumber(key)
-                ? (prev as any).push(val)  // 3). as an item of array: ['${qry}', ...] => [${qry object}, ...]              
+                ? (prev as any).push(val)  // 3). as an item of array: ['${qry}', ...] => [${qry object}, ...]
                 : (prev[key] = val);  // 2). as a value: {prop: '${qry}'} => {prop: ${qry object}}
               return prev;
             }
