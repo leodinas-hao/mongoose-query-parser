@@ -70,7 +70,7 @@ export class MongooseQueryParser {
    * @return {QueryOptions}
    */
   parse(query: string | Object, context?: Object): QueryOptions {
-    const params = typeof query === 'string' ? qs.parse(query) : query;
+    const params = _.isString(query) ? qs.parse(query) : query;
     const options = this.options;
     let result = {};
 
@@ -295,7 +295,7 @@ export class MongooseQueryParser {
    * like '+a,-b,c' to {a: 1, b: -1, c: 1}
    */
   private parseUnaries(unaries, values = { plus: 1, minus: -1 }) {
-    const unariesAsArray = typeof unaries === 'string'
+    const unariesAsArray = _.isString(unaries)
       ? unaries.split(',')
       : unaries;
 
