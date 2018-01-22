@@ -141,14 +141,14 @@ parser.parse('skip=5&limit=10');
 - Due to a MongoDB limitation, you cannot combine inclusion and exclusion semantics in a single projection with the exception of the _id field
 
 ```js
-parser.parse('fields=id,url');
+parser.parse('select=id,url');
 // {
 //   select: { id: 1, url: 1}
 // }
 ```
 
 ```js
-parser.parse('fields=-_id,-email');
+parser.parse('select=-_id,-email');
 // {
 //   select: { _id: 0, email: 0 }
 // }
@@ -246,7 +246,7 @@ The following options are useful to change the operator default keys:
 - `populateKey`: custom populate operator key (default is `populate`)
 - `skipKey`: custom skip operator key (default is `skip`)
 - `limitKey`: custom limit operator key (default is `limit`)
-- `selectKey`: custom select operator key (default is `fields`)
+- `selectKey`: custom select operator key (default is `select`)
 - `sortKey`: custom sort operator key (default is `sort`)
 - `filterKey`: custom filter operator key (default is `filter`)
 
