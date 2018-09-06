@@ -45,7 +45,7 @@ class Tester {
     assert.isOk((parsed.populate as any).length === 2);
   }
 
-  @test('built in casters')
+  @test('should parse built in casters')
   builtInCastersTest() {
     let parser = new MongooseQueryParser();
     let qry = 'key1=string(10)&key2=date(2017-10-01)&key3=string(null)';
@@ -55,7 +55,7 @@ class Tester {
     assert.isOk(typeof parsed.filter['key3'] === 'string');
   }
 
-  @test('should parse caster')
+  @test('should parse custom caster')
   parseCaster() {
     let parser = new MongooseQueryParser({ casters: { $: val => '$' + val } });
     let qry = '_id=$(1)';
