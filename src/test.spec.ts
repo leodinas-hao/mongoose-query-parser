@@ -1,4 +1,4 @@
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from '@testdeck/mocha';
 import { assert } from 'chai';
 
 import { MongooseQueryParser } from './';

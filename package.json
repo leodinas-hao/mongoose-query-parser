@@ -1,6 +1,6 @@
 {
   "name": "mongoose-query-parser",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -30,20 +30,20 @@
   },
   "homepage": "https://github.com/leodinas-hao/mongoose-query-parser#readme",
   "devDependencies": {
+    "@testdeck/mocha": "^0.1.0",
     "@types/chai": "^4.1.4",
-    "@types/lodash": "^4.14.116",
+    "@types/lodash": "^4.14.157",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.9.4",
-    "chai": "^4.1.2",
-    "mocha": "^5.2.0",
-    "mocha-typescript": "^1.1.17",
-    "rimraf": "^2.6.2",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "typescript": "^3.0.3"
+    "@types/node": "^14.0.14",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
   },
   "dependencies": {
-    "lodash": "^4.17.14",
-    "moment": "^2.22.2"
+    "lodash": "^4.17.15",
+    "moment": "^2.27.0"
   }
 }
