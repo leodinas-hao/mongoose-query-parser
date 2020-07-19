@@ -1,0 +1,6 @@
+# Mocha config
+ui: bdd
+timeout: 0
+colors: true
+require: 'ts-node/register/transpile-only'
+spec: src/**/*.spec.ts
