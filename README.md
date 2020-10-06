@@ -288,9 +288,8 @@ The following options are useful to specify which keys to use in the `filter` ob
 - `blacklist`: filter on all keys except the ones specified
 
 ```js
-parser.parse('id=e9117e5c-c405-489b-9c12-d9f398c7a112&apiKey=foobar', {
-  blacklist: ['apiKey']
-});
+const parser = new MongooseQueryParser({ blacklist: ['apiKey'] });
+parser.parse('id=e9117e5c-c405-489b-9c12-d9f398c7a112&apiKey=foobar');
 // {
 //   filter: {
 //     id: 'e9117e5c-c405-489b-9c12-d9f398c7a112',

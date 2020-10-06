@@ -18,6 +18,15 @@ class Tester {
     assert.isOk(parsed.filter['null'] === null);
   }
 
+  @test('should not show black listed property in filter')
+  blacklistTest() {
+    const parser = new MongooseQueryParser({ blacklist: ['apiKey'] });
+    const qry = `id=some-id-here&apiKey=e9117e5c-c405-489b-9c12-d9f398c7a112`;
+    const parsed = parser.parse(qry);
+    assert.exists(parsed.filter);
+    assert.notExists(parsed.filter.apiKey);
+  }
+
   @test('should parse dates with custom formats')
   customDateFormatParse() {
     const parser = new MongooseQueryParser({ dateFormat: ['yyyyMMdd', 'yyyy-MM-dd'] });
