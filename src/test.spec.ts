@@ -18,6 +18,30 @@ class Tester {
     assert.isOk(parsed.filter['null'] === null);
   }
 
+  @test('should parse dates with custom formats')
+  customDateFormatParse() {
+    let parser = new MongooseQueryParser({ dateFormat: 'YYYYMMDD' });
+    const qry = `d1=date(20201001)&d2=2020-01-01&d3=09:20&d4=2020`;
+    const parsed = parser.parse(qry);
+    assert.exists(parsed.filter);
+    assert.isTrue(parsed.filter.d1 instanceof Date);
+    assert.isFalse(parsed.filter.d2 instanceof Date);
+    assert.isNotTrue(parsed.filter.d3 instanceof Date);
+    assert.isTrue(typeof parsed.filter.d4 === 'number');
+  }
+
+  @test('should parse dates')
+  dateParse() {
+    let parser = new MongooseQueryParser();
+    const qry = `d1=2020-10-01&d2=2020-01&d3=09:20&d4=2020`;
+    const parsed = parser.parse(qry);
+    assert.exists(parsed.filter);
+    assert.isTrue(parsed.filter.d1 instanceof Date);
+    assert.isTrue(parsed.filter.d2 instanceof Date);
+    assert.isNotTrue(parsed.filter.d3 instanceof Date);
+    assert.isTrue(typeof parsed.filter.d4 === 'number');
+  }
+
   @test('should parse query with string templates')
   generalParse2() {
     const parser = new MongooseQueryParser();

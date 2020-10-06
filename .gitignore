@@ -58,7 +58,8 @@ typings/
 .env
 
 # editor
-.vscode
+.vscode/*
+!.vscode/launch.json
 
 # compiled
 lib/
