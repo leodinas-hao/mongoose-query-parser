@@ -72,20 +72,20 @@ const parsed = parser.parse('${vip}&status=${sentStatus}&timestamp>2017-10-01&au
 
 #### Filtering operators
 
-| MongoDB | URI | Example | Result |
-| ------- | --- | ------- | ------ |
-| `$eq` | `key=val` | `type=public` | `{filter: {type: 'public'}}` |
-| `$gt` | `key>val` | `count>5` | `{filter: {count: {$gt: 5}}}` |
-| `$gte` | `key>=val` | `rating>=9.5` | `{filter: {rating: {$gte: 9.5}}}` |
-| `$lt` | `key<val` | `createdAt<2017-10-01` | `{filter: {createdAt: {$lt: 2017-09-30T14:00:00.000Z}}}` |
-| `$lte` | `key<=val` | `score<=-5` | `{filter: {score: {$lte: -5}}}` |
-| `$ne` | `key!=val` | `status!=success` | `{filter: {status: {$ne: 'success'}}}` |
-| `$in` | `key=val1,val2` | `country=GB,US` | `{filter: {country: {$in: ['GB', 'US']}}}` |
-| `$nin` | `key!=val1,val2` | `lang!=fr,en` | `{filter: {lang: {$nin: ['fr', 'en']}}}` |
-| `$exists` | `key` | `phone` | `{filter: {phone: {$exists: true}}}` |
-| `$exists` | `!key` | `!email` | `{filter: {email: {$exists: false}}}` |
-| `$regex` | `key=/value/<opts>` | `email=/@gmail\.com$/i` | `{filter: {email: /@gmail.com$/i}}` |
-| `$regex` | `key!=/value/<opts>` | `phone!=/^06/` | `{filter: {phone: { $not: /^06/}}}` |
+| MongoDB   | URI                  | Example                 | Result                                                   |
+| --------- | -------------------- | ----------------------- | -------------------------------------------------------- |
+| `$eq`     | `key=val`            | `type=public`           | `{filter: {type: 'public'}}`                             |
+| `$gt`     | `key>val`            | `count>5`               | `{filter: {count: {$gt: 5}}}`                            |
+| `$gte`    | `key>=val`           | `rating>=9.5`           | `{filter: {rating: {$gte: 9.5}}}`                        |
+| `$lt`     | `key<val`            | `createdAt<2017-10-01`  | `{filter: {createdAt: {$lt: 2017-09-30T14:00:00.000Z}}}` |
+| `$lte`    | `key<=val`           | `score<=-5`             | `{filter: {score: {$lte: -5}}}`                          |
+| `$ne`     | `key!=val`           | `status!=success`       | `{filter: {status: {$ne: 'success'}}}`                   |
+| `$in`     | `key=val1,val2`      | `country=GB,US`         | `{filter: {country: {$in: ['GB', 'US']}}}`               |
+| `$nin`    | `key!=val1,val2`     | `lang!=fr,en`           | `{filter: {lang: {$nin: ['fr', 'en']}}}`                 |
+| `$exists` | `key`                | `phone`                 | `{filter: {phone: {$exists: true}}}`                     |
+| `$exists` | `!key`               | `!email`                | `{filter: {email: {$exists: false}}}`                    |
+| `$regex`  | `key=/value/<opts>`  | `email=/@gmail\.com$/i` | `{filter: {email: /@gmail.com$/i}}`                      |
+| `$regex`  | `key!=/value/<opts>` | `phone!=/^06/`          | `{filter: {phone: { $not: /^06/}}}`                      |
 
 For more advanced usage (`$or`, `$type`, `$elemMatch`, etc.), pass any MongoDB query filter object as JSON string in the `filter` query parameter, ie:
 
@@ -266,11 +266,12 @@ parser.parse('organizationId=123&offset=10&max=125');
 ```
 
 #### Date format
-- `dateFormat`: set date format for auto date casting. Default is ISO_8601 format
-- Allows multiple formats. Works with [moment](https://momentjs.com/docs/#/parsing/string/)
+- `dateFormat`: set date format for auto date casting. Default is ISO_8601 format if no custom datetime format provided
+- Allows multiple formats. Works with [luxon](https://github.com/moment/luxon)
+- For the supported format tokens, please refer to [luxon document](https://moment.github.io/luxon/docs/manual/parsing.html#table-of-tokens)
 
 ```js
-const parser = new MongooseQueryParser({dateFormat: ['YYYYMMDD', 'YYYY-MM-DD']});
+const parser = new MongooseQueryParser({dateFormat: ['yyyyMMdd', 'yyyy-MM-dd']});
 parser.parse('date1=20171001&date2=2017-10-01');
 // {
 //   filter: {

@@ -1,9 +1,10 @@
 import * as qs from 'querystring';
-import * as Moment from 'moment';
 import * as _ from 'lodash';
 
+import { toDate } from './utils';
+
 export interface ParserOptions {
-  dateFormat?: any;
+  dateFormat?: string | string[];
   blacklist?: string[]; // list of fields should not be in filter
   casters?: { [key: string]: (val: string) => any };
   castParams?: { [key: string]: string };
@@ -26,14 +27,12 @@ export interface QueryOptions {
 }
 
 export class MongooseQueryParser {
-  private readonly defaultDateFormat = [Moment.ISO_8601];
-
   private readonly builtInCaster = {
     string: val => String(val),
     date: val => {
-      const m = Moment(val, this.options.dateFormat);
-      if (m.isValid()) {
-        return m.toDate();
+      const dt = toDate(val, this.options.dateFormat);
+      if (dt.isValid) {
+        return dt.toJSDate();
       } else {
         throw new Error(`Invalid date string: [${val}]`);
       }
@@ -50,9 +49,6 @@ export class MongooseQueryParser {
   ];
 
   constructor(private options: ParserOptions = {}) {
-    // add default date format as ISO_8601
-    this.options.dateFormat = options.dateFormat || this.defaultDateFormat;
-
     // add builtInCaster
     this.options.casters = Object.assign(this.builtInCaster, options.casters);
 
@@ -143,9 +139,9 @@ export class MongooseQueryParser {
     }
 
     // Match dates
-    const m = Moment(value, options.dateFormat, true);
-    if (m.isValid()) {
-      return m.toDate();
+    const dt = toDate(value, this.options.dateFormat);
+    if (dt.isValid) {
+      return dt.toJSDate();
     }
 
     return value;

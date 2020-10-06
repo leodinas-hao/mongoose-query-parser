@@ -7,9 +7,9 @@ import { MongooseQueryParser } from './';
 class Tester {
   @test('should parse general query')
   generalParse() {
-    let parser = new MongooseQueryParser();
-    let qry = 'date=2016-01-01&boolean=true&integer=10&regexp=/foobar/i&null=null';
-    let parsed = parser.parse(qry);
+    const parser = new MongooseQueryParser();
+    const qry = 'date=2016-01-01&boolean=true&integer=10&regexp=/foobar/i&null=null';
+    const parsed = parser.parse(qry);
     assert.isNotNull(parsed.filter);
     assert.isOk(parsed.filter['date'] instanceof Date);
     assert.isOk(parsed.filter['boolean'] === true);
@@ -20,25 +20,25 @@ class Tester {
 
   @test('should parse dates with custom formats')
   customDateFormatParse() {
-    let parser = new MongooseQueryParser({ dateFormat: 'YYYYMMDD' });
+    const parser = new MongooseQueryParser({ dateFormat: ['yyyyMMdd', 'yyyy-MM-dd'] });
     const qry = `d1=date(20201001)&d2=2020-01-01&d3=09:20&d4=2020`;
     const parsed = parser.parse(qry);
     assert.exists(parsed.filter);
     assert.isTrue(parsed.filter.d1 instanceof Date);
-    assert.isFalse(parsed.filter.d2 instanceof Date);
+    assert.isTrue(parsed.filter.d2 instanceof Date);
     assert.isNotTrue(parsed.filter.d3 instanceof Date);
     assert.isTrue(typeof parsed.filter.d4 === 'number');
   }
 
   @test('should parse dates')
   dateParse() {
-    let parser = new MongooseQueryParser();
+    const parser = new MongooseQueryParser();
     const qry = `d1=2020-10-01&d2=2020-01&d3=09:20&d4=2020`;
     const parsed = parser.parse(qry);
     assert.exists(parsed.filter);
     assert.isTrue(parsed.filter.d1 instanceof Date);
     assert.isTrue(parsed.filter.d2 instanceof Date);
-    assert.isNotTrue(parsed.filter.d3 instanceof Date);
+    assert.isTrue(parsed.filter.d3 instanceof Date);
     assert.isTrue(typeof parsed.filter.d4 === 'number');
   }
 
@@ -63,17 +63,17 @@ class Tester {
 
   @test('should parse populate query')
   async populateParse() {
-    let parser = new MongooseQueryParser();
-    let qry = '_id=1&populate=serviceSalesOrders,customer.category,customer.name';
-    let parsed = parser.parse(qry);
+    const parser = new MongooseQueryParser();
+    const qry = '_id=1&populate=serviceSalesOrders,customer.category,customer.name';
+    const parsed = parser.parse(qry);
     assert.isOk((parsed.populate as any).length === 2);
   }
 
   @test('should parse built in casters')
   builtInCastersTest() {
-    let parser = new MongooseQueryParser();
-    let qry = 'key1=string(10)&key2=date(2017-10-01)&key3=string(null)';
-    let parsed = parser.parse(qry);
+    const parser = new MongooseQueryParser();
+    const qry = 'key1=string(10)&key2=date(2017-10-01)&key3=string(null)';
+    const parsed = parser.parse(qry);
     assert.isOk(typeof parsed.filter['key1'] === 'string');
     assert.isOk(parsed.filter['key2'] instanceof Date);
     assert.isOk(typeof parsed.filter['key3'] === 'string');
@@ -81,31 +81,31 @@ class Tester {
 
   @test('should parse custom caster')
   parseCaster() {
-    let parser = new MongooseQueryParser({ casters: { $: val => '$' + val } });
-    let qry = '_id=$(1)';
-    let parsed = parser.parse(qry);
+    const parser = new MongooseQueryParser({ casters: { $: val => '$' + val } });
+    const qry = '_id=$(1)';
+    const parsed = parser.parse(qry);
     assert.equal('$1', parsed.filter['_id']);
   }
 
   @test('should parse json filter')
   parseJsonFilter() {
-    let parser = new MongooseQueryParser();
-    let obj = {
+    const parser = new MongooseQueryParser();
+    const obj = {
       $or: [
         { key1: 'value1' },
         { key2: 'value2' }
       ]
     };
-    let qry = `filter=${JSON.stringify(obj)}&name=Google`;
-    let parsed = parser.parse(qry);
+    const qry = `filter=${JSON.stringify(obj)}&name=Google`;
+    const parsed = parser.parse(qry);
     assert.isArray(parsed.filter['$or']);
     assert.isOk(parsed.filter['name'] === 'Google');
   }
 
   @test('should parse predefined query objects')
   parsePredefined() {
-    let parser = new MongooseQueryParser();
-    let preDefined = {
+    const parser = new MongooseQueryParser();
+    const preDefined = {
       isActive: { status: { $in: ['In Progress', 'Pending'] } },
       vip: ['KFC', 'Google', 'MS'],
       secret: 'my_secret',
