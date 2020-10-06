@@ -143,7 +143,7 @@ export class MongooseQueryParser {
     }
 
     // Match dates
-    let m = Moment(value, options.dateFormat);
+    const m = Moment(value, options.dateFormat, true);
     if (m.isValid()) {
       return m.toDate();
     }
