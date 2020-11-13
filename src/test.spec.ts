@@ -8,7 +8,7 @@ class Tester {
   @test('should parse general query')
   generalParse() {
     const parser = new MongooseQueryParser();
-    const qry = 'date=2016-01-01&boolean=true&integer=10&regexp=/foobar/i&null=null';
+    const qry = 'date=2016-01-01&boolean=true&integer=10&regexp=/foobar/i&null=null&!notexists';
     const parsed = parser.parse(qry);
     assert.isNotNull(parsed.filter);
     assert.isOk(parsed.filter['date'] instanceof Date);
@@ -16,6 +16,7 @@ class Tester {
     assert.isOk(parsed.filter['integer'] === 10);
     assert.isOk(parsed.filter['regexp'] instanceof RegExp);
     assert.isOk(parsed.filter['null'] === null);
+    assert.isFalse(parsed.filter['notexists']['$exists']);
   }
 
   @test('should not show black listed property in filter')
