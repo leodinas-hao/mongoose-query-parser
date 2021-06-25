@@ -28,6 +28,37 @@ class Tester {
     assert.notExists(parsed.filter.apiKey);
   }
 
+  @test('should not show black listed property in parsed object filter query')
+  parsedObjectBlacklistTest() {
+    const parser = new MongooseQueryParser({ blacklist: ['apiKey'] });
+    const qry = {
+      filter: '{"apiKey":"e9117e5c-c405-489b-9c12-d9f398c7a112"}'
+    };
+    const parsed = parser.parse(qry);
+    assert.exists(parsed.filter);
+    assert.notExists(parsed.filter.apiKey);
+  }
+
+  @test('should not show black listed property in JSON filter query')
+  jsonFilterBlcaklistTest() {
+    const options = { blacklist: ['key1', 'key3']};
+    const parser = new MongooseQueryParser(options);
+    const obj = {
+      $or: [
+        { key1: 'value1' },
+        { key2: { $in: ['key3', 'key2'] }},
+        { key3: 'value3' }
+      ]
+    };
+    const qry = `filter=${JSON.stringify(obj)}&name=Google`;
+    const parsed = parser.parse(qry);
+    assert.isArray(parsed.filter['$or']);
+    assert.isOk(parsed.filter['name'] === 'Google');
+    assert.isNotOk(parsed.filter['$or'].some(obj => {
+      options.blacklist.forEach(key => obj.hasOwnProperty(key))
+    }));
+  }
+
   @test('should parse dates with custom formats')
   customDateFormatParse() {
     const parser = new MongooseQueryParser({ dateFormat: ['yyyyMMdd', 'yyyy-MM-dd'] });
