@@ -147,9 +147,25 @@ export class MongooseQueryParser {
     return value;
   }
 
+  private excludeFilterKeys(obj: any, blacklist: String[]) {
+    for (var i in obj) {
+      if (!obj.hasOwnProperty(i)) continue;
+      if (typeof obj[i] == "object") {
+        this.excludeFilterKeys(obj[i], blacklist);
+      } else if (blacklist.indexOf(i) !== -1) {
+        delete obj[i];
+      }
+    }
+    return _.isArray(obj) ? _.remove(obj,el => _.isEmpty(el)) : obj
+  }
+
   private castFilter(filter, params) {
     const options = this.options;
     const parsedFilter = filter ? this.parseFilter(filter) : {};
+
+    // filter out blacklisted keys in JSON filter query
+    const subsetParsedFilter = this.excludeFilterKeys(parsedFilter, options.blacklist);
+
     return Object.keys(params)
       .map(val => {
         const join = params[val] ? `${val}=${params[val]}` : val;
@@ -176,7 +192,7 @@ export class MongooseQueryParser {
         }
 
         return result;
-      }, parsedFilter);
+      }, subsetParsedFilter);
   }
 
   private parseFilter(filter) {
