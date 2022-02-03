@@ -22,7 +22,7 @@ npm install mongoose-query-parser --save
 ## Usage
 
 ### API
-```
+```js
 import { MongooseQueryParser } from 'mongoose-query-parser';
 
 const parser = new MongooseQueryParser(options?: ParserOptions)
