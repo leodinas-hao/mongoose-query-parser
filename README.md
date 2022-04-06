@@ -15,14 +15,14 @@ The library is built highly inspired by [api-query-params](https://github.com/lo
 - Allows customization of keys and options in query string
 
 ## Installation
-```
+```sh
 npm install mongoose-query-parser --save
 ```
 
 ## Usage
 
 ### API
-```
+```js
 import { MongooseQueryParser } from 'mongoose-query-parser';
 
 const parser = new MongooseQueryParser(options?: ParserOptions)
