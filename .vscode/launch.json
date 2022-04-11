@@ -16,7 +16,7 @@
         "--config",
         ".mocha.yml",
         "--grep",
-        "/^Tester/"
+        "/^${fileBasenameNoExtension}/"
       ],
       "console": "integratedTerminal"
     }

@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import { MongooseQueryParser } from './';
 
-@suite('Tester')
+@suite('test.spec')
 class Tester {
   @test('should parse general query')
   generalParse() {
@@ -41,12 +41,12 @@ class Tester {
 
   @test('should not show black listed property in JSON filter query')
   jsonFilterBlcaklistTest() {
-    const options = { blacklist: ['key1', 'key3']};
+    const options = { blacklist: ['key1', 'key3'] };
     const parser = new MongooseQueryParser(options);
     const obj = {
       $or: [
         { key1: 'value1' },
-        { key2: { $in: ['key3', 'key2'] }},
+        { key2: { $in: ['key3', 'key2'] } },
         { key3: 'value3' }
       ]
     };
@@ -55,7 +55,7 @@ class Tester {
     assert.isArray(parsed.filter['$or']);
     assert.isOk(parsed.filter['name'] === 'Google');
     assert.isNotOk(parsed.filter['$or'].some(obj => {
-      options.blacklist.forEach(key => obj.hasOwnProperty(key))
+      options.blacklist.forEach(key => obj.hasOwnProperty(key));
     }));
   }
 
@@ -103,11 +103,30 @@ class Tester {
   }
 
   @test('should parse populate query')
-  async populateParse() {
+  populateParse() {
     const parser = new MongooseQueryParser();
     const qry = '_id=1&populate=serviceSalesOrders,customer.category,customer.name';
     const parsed = parser.parse(qry);
     assert.isOk((parsed.populate as any).length === 2);
+  }
+
+  @test('should parse deep populate')
+  deepPopulateParse() {
+    const parser = new MongooseQueryParser();
+    const qry = '_id=1&populate=p1,p2:p3.p4,p2:p3.p5,p6:p7';
+    const parsed = parser.parse(qry);
+    assert.isNotEmpty(parsed.populate);
+    assert.isTrue(parsed.populate.length === 3);
+    for (const p of parsed.populate) {
+      if (p.path === 'p2') {
+        assert.isTrue(p.populate.path === 'p3');
+        assert.isTrue(p.populate.select.includes('p4'));
+        assert.isTrue(p.populate.select.includes('p5'));
+      }
+      if (p.path === 'p6') {
+        assert.isTrue(p.populate.path === 'p7');
+      }
+    }
   }
 
   @test('should parse built in casters')

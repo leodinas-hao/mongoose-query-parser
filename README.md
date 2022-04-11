@@ -51,20 +51,19 @@ const predefined = {
   sentStatus: 'sent'
 };
 const parsed = parser.parse('${vip}&status=${sentStatus}&timestamp>2017-10-01&author.firstName=/john/i&limit=100&skip=50&sort=-timestamp&select=name&populate=children.firstName,children.lastName', predefined);
-{
-  select: { name : 1 },
-  populate: [{ path: 'children', select: 'firstName lastName' }],
-  sort: { timestamp: -1 },
-  skip: 50,
-  limit: 100,
-  filter: {
-    name: {{ $in: ['Google', 'Microsoft', 'NodeJs'] }},
-    status: 'sent',
-    timestamp: { '$gt': 2017-09-30T14:00:00.000Z },
-    'author.firstName': /john/i
-  }
-}
-
+// {
+//   select: { name : 1 },
+//   populate: [{ path: 'children', select: 'firstName lastName' }],
+//   sort: { timestamp: -1 },
+//   skip: 50,
+//   limit: 100,
+//   filter: {
+//     name: {{ $in: ['Google', 'Microsoft', 'NodeJs'] }},
+//     status: 'sent',
+//     timestamp: { '$gt': 2017-09-30T14:00:00.000Z },
+//     'author.firstName': /john/i
+//   }
+// }
 ```
 
 
@@ -105,17 +104,24 @@ parser.parse('filter={"$or":[{"key1":"value1"},{"key2":"value2"}]}&name=Telstra'
 #### Populate operators
 
 - Useful to populate sub-document(s) in query. Works with `MongooseJS`. Please see [Mongoose Populate](http://mongoosejs.com/docs/populate.html) for more details
-- Allows to populate only selected fields
+- Supports deep populate with delimiter ":" 
+  - Below example & `test-populate.spec.ts` for more details
+  - See [Mongoose Docs](https://mongoosejs.com/docs/populate.html#deep-populate)
+- Allows to populate with only selected fields
 - Default operator key is `populate`
 
 ```js
-parser.parse('populate=class,school.name');
+parser.parse('populate=createdBy:friends.name,createdBy.name,likedBy.name');
 // {
 //   populate: [{
-//     path: 'class'
+//     path: 'createdBy',
+//     select: 'name',
+//     populate: {
+//       path: 'name',
+//     }
 //   }, {
-//     path: 'school',
-//     select: 'name'
+//     path: 'likedBy',
+//     select: 'name',
 //   }]
 // }
 ```

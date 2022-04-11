@@ -148,15 +148,15 @@ export class MongooseQueryParser {
   }
 
   private excludeFilterKeys(obj: any, blacklist: String[]) {
-    for (var i in obj) {
-      if (!obj.hasOwnProperty(i)) continue;
-      if (typeof obj[i] == "object") {
+    for (const i in obj) {
+      if (!obj.hasOwnProperty(i)) { continue; }
+      if (typeof obj[i] == 'object') {
         this.excludeFilterKeys(obj[i], blacklist);
       } else if (blacklist.indexOf(i) !== -1) {
         delete obj[i];
       }
     }
-    return _.isArray(obj) ? _.remove(obj,el => _.isEmpty(el)) : obj
+    return _.isArray(obj) ? _.remove(obj, el => _.isEmpty(el)) : obj;
   }
 
   private castFilter(filter, params) {
@@ -259,36 +259,52 @@ export class MongooseQueryParser {
   }
 
   /**
-   * cast populate query to object like:
-   * populate=field1.p1,field1.p2,field2
+   * cast populate query to object
+   * see mongoose doc here: https://mongoosejs.com/docs/populate.html#deep-populate
+   * considering the following schemas:
+   * Users => { _id, name:string, email:string, friends: [{ref: 'User'}] }
+   * Posts => { createdBy: {ref: 'User'}, likedBy: [{ref: 'User'}], contents: string, title: string }
+   * Example 1:
+   * populate=createdBy.name,createdBy.email,likedBy
    * =>
-   * [{path: 'field1', select: 'p1 p2'}, {path: 'field2'}]
+   * [{path: 'createdBy', select: 'name email'}, {path: 'likedBy'}]
+   * Example 2 (deep populate):
+   * populate=createdBy:friends.name,createdBy:friends.email,createdBy.name,createdBy.email
+   * =>
+   * [{path: 'createdBy', select: 'name email', populate: {path: 'friends', select: 'name email'}}]
    * @param val
    */
   private castPopulate(val: string) {
-    return val
-      .split(',')
-      .map(qry => {
-        const [p, s] = qry.split('.', 2);
-        return s ? { path: p, select: s } : { path: p };
-      }).reduce((prev, curr, key) => {
-        // consolidate population array
-        const path = curr.path;
-        const select = (curr as any).select;
-        let found = false;
-        prev.forEach(e => {
-          if (e.path === path) {
-            found = true;
-            if (select) {
-              e.select = e.select ? (e.select + ' ' + select) : select;
-            }
-          }
-        });
-        if (!found) {
-          prev.push(curr);
+    const ls = val.split(',').map((s) => s.split(':'));
+    const populates = [];
+    const buildPopulate = (prop: string, pObj) => {
+      const [path, select] = prop.split('.', 2);
+      if (!pObj) {
+        pObj = populates.find(p => p.path == path);
+        if (!pObj) {
+          // create new populate query object
+          pObj = { path };
+          populates.push(pObj);
         }
-        return prev;
-      }, []);
+      } else {
+        if (pObj.populate?.path !== path) {
+          // create deep populate
+          pObj.populate = { path };
+        }
+        pObj = pObj.populate;
+      }
+      if (select) {
+        pObj.select = pObj.select ? (pObj.select + ' ' + select) : select;
+      }
+      return pObj;
+    };
+    for (const s of ls) {
+      let pObj = undefined;
+      for (const prop of s) {
+        pObj = buildPopulate(prop, pObj);
+      }
+    }
+    return populates;
   }
 
   /**
