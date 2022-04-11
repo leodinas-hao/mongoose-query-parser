@@ -104,10 +104,10 @@ parser.parse('filter={"$or":[{"key1":"value1"},{"key2":"value2"}]}&name=Telstra'
 #### Populate operators
 
 - Useful to populate sub-document(s) in query. Works with `MongooseJS`. Please see [Mongoose Populate](http://mongoosejs.com/docs/populate.html) for more details
-- Supports deep populate with delimiter ":" 
+- Supports deep populate with delimiter ":" to indicate deep populate
   - Below example & `test-populate.spec.ts` for more details
   - See [Mongoose Docs](https://mongoosejs.com/docs/populate.html#deep-populate)
-- Allows to populate with only selected fields
+- Allows to populate with only selected fields with "." to indicate field selection
 - Default operator key is `populate`
 
 ```js
@@ -117,7 +117,8 @@ parser.parse('populate=createdBy:friends.name,createdBy.name,likedBy.name');
 //     path: 'createdBy',
 //     select: 'name',
 //     populate: {
-//       path: 'name',
+//       path: 'friends',
+//       select: 'name',
 //     }
 //   }, {
 //     path: 'likedBy',

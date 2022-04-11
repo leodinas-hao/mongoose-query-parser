@@ -113,7 +113,7 @@ class Tester {
   @test('should parse deep populate')
   deepPopulateParse() {
     const parser = new MongooseQueryParser();
-    const qry = '_id=1&populate=p1,p2:p3.p4,p2:p3.p5,p6:p7';
+    const qry = '_id=1&populate=p1,p2:p3.p4,p2:p3:p5,p6:p7';
     const parsed = parser.parse(qry);
     assert.isNotEmpty(parsed.populate);
     assert.isTrue(parsed.populate.length === 3);
@@ -121,7 +121,7 @@ class Tester {
       if (p.path === 'p2') {
         assert.isTrue(p.populate.path === 'p3');
         assert.isTrue(p.populate.select.includes('p4'));
-        assert.isTrue(p.populate.select.includes('p5'));
+        assert.isTrue(p.populate.populate.path === 'p5');
       }
       if (p.path === 'p6') {
         assert.isTrue(p.populate.path === 'p7');

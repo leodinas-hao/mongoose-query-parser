@@ -1,6 +1,6 @@
 {
   "name": "mongoose-query-parser",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Convert url query string to MongooseJs friendly query object including advanced filtering, sorting, population, string template, type casting and many more...",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
