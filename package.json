@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "luxon": "^1.27.0"
+    "luxon": "^2.5.2"
   }
 }
