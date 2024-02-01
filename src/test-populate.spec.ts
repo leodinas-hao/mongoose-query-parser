@@ -1,6 +1,7 @@
 import { suite, test } from '@testdeck/mocha';
 import { assert } from 'chai';
 import * as Mongoose from 'mongoose';
+import {MongoMemoryServer} from 'mongodb-memory-server';
 
 import { MongooseQueryParser } from './';
 
@@ -8,14 +9,15 @@ import { MongooseQueryParser } from './';
 @suite('test-populate.spec')
 class PopulateTester {
 
-  static CONN_STR = 'mongodb://localhost:27017/test';
+  static server: MongoMemoryServer;
   static conn: Mongoose.Connection;
   static User: Mongoose.Model<any, any>;
   static Post: Mongoose.Model<any, any>;
 
-  static connect() {
-    if (PopulateTester.conn == null) {
-      PopulateTester.conn = Mongoose.createConnection(PopulateTester.CONN_STR);
+  static async connect() {
+    if (!PopulateTester.server) {
+      PopulateTester.server = await MongoMemoryServer.create();
+      PopulateTester.conn = Mongoose.createConnection(PopulateTester.server.getUri());
     }
   }
 
@@ -33,7 +35,7 @@ class PopulateTester {
       likedBy: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'User' }]
     });
 
-    PopulateTester.connect();
+    await PopulateTester.connect();
     PopulateTester.User = PopulateTester.conn.model('User', userSchema);
     PopulateTester.Post = PopulateTester.conn.model('Post', postSchema);
 
@@ -70,6 +72,7 @@ class PopulateTester {
     await PopulateTester.Post.collection.drop();
     await PopulateTester.User.collection.drop();
     await PopulateTester.conn?.close();
+    await PopulateTester.server?.stop();
   }
 
   @test('should query with deep populate')
