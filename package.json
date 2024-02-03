@@ -9,7 +9,8 @@
     "compile": "npm run clean && tsc",
     "prepublishOnly": "npm run compile",
     "test": "mocha --config '.mocha.yml'",
-    "lint": "tslint src/**/*.ts"
+    "lint": "tslint src/**/*.ts",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.12.1",
     "chai": "^4.3.4",
+    "husky": "^9.0.7",
     "mocha": "^8.4.0",
     "mongoose": "^6.2.10",
     "rimraf": "^3.0.2",

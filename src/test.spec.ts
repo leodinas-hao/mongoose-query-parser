@@ -97,9 +97,9 @@ class Tester {
     assert.isOk(parsed.filter['author.firstName'] instanceof RegExp);
     assert.isOk(parsed.limit === 100);
     assert.isOk(parsed.skip === 50);
-    assert.isNotNull(parsed.sort);
-    assert.isNotNull(parsed.select);
-    assert.isNotNull(parsed.populate);
+    assert.deepEqual(parsed.sort, { timestamp: -1 });
+    assert.deepEqual(parsed.select, { name: 1});
+    assert.deepEqual([{ path: 'children' }], parsed.populate);
   }
 
   @test('should parse populate query')
@@ -185,5 +185,9 @@ class Tester {
     qry = 'filter={"$and": ["${isActive}", {"customer": "VDF"}]}';
     parsed = parser.parse(qry, preDefined);
     assert.isNotNull(parsed.filter['$and'][0].status);
+    assert.deepEqual(parsed.filter['$and'][0], {
+      status: { $in: ['In Progress', 'Pending'] }
+    });
+    assert.deepEqual(parsed.filter['$and'][1], { customer: 'VDF' });
   }
 }

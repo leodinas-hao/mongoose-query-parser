@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  pull_request:
+    branches: ['master']
+  push:
+    branches: ['master']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['20.10.0']
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install libraries
+        run: npm install
+      - name: Run test
+        run: npm test
